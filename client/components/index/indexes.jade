@@ -1,0 +1,22 @@
+template(name="indexes")
+    
+    h1.ui.center.aligned.header(style="margin: 1.5em 0") Stock indexes
+    
+    .ui.divided.list
+        each indexes
+            table.ui.fluid.selectable.table
+                
+                tbody
+                    each companies
+                        +listedIndex
+
+template(name="listedIndex")
+    tr.listed.company
+        td
+            | #{ident}
+        td
+            | #{name}
+        td
+            | {{dollar totalValue}}
+        td
+            | #{companyCount}

@@ -1,0 +1,18 @@
+template(name="traders")
+    
+    h1.ui.center.aligned.header(style="margin: 1.5em 0") Top Traders
+    
+    table.ui.fluid.selectable.striped.table
+        tbody
+            each traders
+                +listedTrader
+
+
+template(name="listedTrader")
+    tr.trader
+        td
+            | # #{placement}
+        td
+            | #{profile.nickname}
+        td(style="text-align:right;")
+            | {{dollar cash}}

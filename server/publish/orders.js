@@ -1,5 +1,5 @@
 
-Meteor.publish("index", function (opts) {
+Meteor.publish("orders", function (opts) {
     let query = {};
     
     _.each(opts, (val, key) => {
@@ -7,6 +7,6 @@ Meteor.publish("index", function (opts) {
             query[key] = val;
         }
     });
-    
-    return Index.find(query);
+        
+    return Order.find(query);
 });

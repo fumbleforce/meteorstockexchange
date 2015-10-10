@@ -37,9 +37,6 @@ Template.listedCompany.onRendered(function () {
 });
 
 Template.listedCompany.helpers({
-    lastPrice: () => {
-        return Math.floor(Math.random()*10000);
-    }
 });
 
 Template.listedCompany.events({

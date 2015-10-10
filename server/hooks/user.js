@@ -1,4 +1,4 @@
-
+/*
 // Add additional fields to the user model on creation
 Accounts.onCreateUser(function(options, user) {
     
@@ -7,3 +7,4 @@ Accounts.onCreateUser(function(options, user) {
     return user;
 });
 
+*/

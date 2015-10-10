@@ -7,62 +7,13 @@ template(name="company")
             a.selection(href="/companies") Companies
             i.right.chevron.icon.divider
             a.active.selection=name
-            
-        h1.ui.header
-            | #{name}
-            | (#{ticker})
-            
-        .ui.stacked.padded.segment
-            h4
-                | #{phrase}
-            | #{description}
-    
-    
-    .ui.basic.segment
-        .priceChart(style="height:400px; width: 100%")
-    
-    
-    .ui.equal.width.grid
-        .column
-            h2.ui.center.aligned.dividing.header Sellers
-            
-            table.ui.selectable.celled.table
-                thead
-                    tr
-                        th Time
-                        th Price
-                        th Volume
-                        th Seller
-                tbody
-                    each sellers
-                        tr
-                            td
-                                | #{time}
-                            td
-                                | #{price}
-                            td
-                                | #{volume}
-                            td
-                                | #{seller}
-        .column
-            h2.ui.center.aligned.dividing.header Buyers
-            
-            table.ui.selectable.celled.table
-                thead
-                    tr
-                        th Time
-                        th Price
-                        th Volume
-                        th Seller
-                tbody
-                    each buyers
-                        tr
-                            td
-                                | #{time}
-                            td
-                                | #{price}
-                            td
-                                | #{volume}
-                            td
-                                | #{seller}
-                            
+        
+        .ui.three.item.menu
+            .item(data-show="info" class="{{activeView 'info'}}")
+                | Company information
+            .item(data-show="trading" class="{{activeView 'trading'}}")
+                | Trading
+            .item(data-show="historical" class="{{activeView 'historical'}}")
+                | Historical data
+        
+    +Template.dynamic(template=view data=company)

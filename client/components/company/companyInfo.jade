@@ -1,0 +1,10 @@
+template(name="companyInfo")
+    
+    h1.ui.header
+        | #{name}
+        | (#{ticker})
+        
+    .ui.stacked.padded.segment
+        h4
+            | #{phrase}
+        | #{description}

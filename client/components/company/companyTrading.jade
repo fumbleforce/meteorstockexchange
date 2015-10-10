@@ -1,0 +1,72 @@
+template(name="companyTrading")
+    
+    .ui.inverted.brown.segment
+        
+        if currentUser
+            .ui.inverted.form
+                .inline.four.inverted.fields(style="margin:0;")
+                    .field
+                        label(style="color:#fff") Price
+                        input(name="price" type="number" value="100")
+                    .field
+                        label(style="color:#fff") Volume
+                        input(name="volume" type="number" value="100")
+                    .inline.fields
+                        .field
+                            .ui.radio.checkbox
+                                label Buy
+                                input.hidden(type="radio" name="orderType" value="buy" checked)            
+                        .field
+                            .ui.radio.checkbox
+                                label Sell
+                                input.hidden(type="radio" name="orderType" value="sell")
+                    .field
+                        .ui.issue.green.right.floated.button Issue order
+        else
+            h2 Register to issue buy and sell orders
+                
+    .ui.equal.width.grid
+        .column
+            h2.ui.center.aligned.dividing.header Sell orders
+            
+            table.ui.selectable.celled.table
+                thead
+                    tr
+                        th Time
+                        th Price
+                        th Volume
+                        th Seller
+                tbody
+                    each sellers
+                        tr.blink
+                            td
+                                | #{time}
+                            td
+                                | #{price}
+                            td
+                                | #{volume}
+                            td
+                                | #{seller}
+        .column
+            h2.ui.center.aligned.dividing.header Buy orders
+            
+            table.ui.selectable.celled.table
+                thead
+                    tr
+                        th Time
+                        th Price
+                        th Volume
+                        th Seller
+                tbody
+                    each buyers
+                        tr.blink
+                            td
+                                | #{time}
+                            td
+                                | #{price}
+                            td
+                                | #{volume}
+                            td
+                                | #{seller}
+
+template(name="orderEntry")
