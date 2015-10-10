@@ -1,0 +1,20 @@
+template(name="companies")
+    
+    h1.ui.header Publicly traded companies
+    
+    table.ui.fluid.selectable.table
+        
+        tbody
+            each companies
+                +listedCompany
+
+template(name="listedCompany")
+    tr.listed.company
+        td
+            | #{ticker}
+        td
+            | #{name}
+        td
+            | {{dollar lastPrice}}
+        td
+            | #{phrase}

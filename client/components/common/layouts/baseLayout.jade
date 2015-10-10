@@ -1,0 +1,32 @@
+template(name="baseLayout")
+    
+    .ui.inverted.brown.labeled.icon.menu
+        .ui.container
+            h2.header.item(href="/") Meteor Stock Exchange
+        
+            a.item(href="indexes")
+                i.icon.ticket
+                | Indexes
+            a.item(href="/companies")
+                i.suitcase.icon
+                | Companies
+            a.item(href="/traders")
+                i.users.icon
+                | Traders
+            
+            .right.menu
+                if currentUser
+                    a.item(href="/mypage")
+                        i.home.icon
+                        | My page
+                else
+                    a.item(href="/sign-in")
+                        i.sign.in.icon
+                        | Log in
+    
+    
+    .ui.main.container
+        +Template.dynamic(template=content)
+    
+    
+    footer
