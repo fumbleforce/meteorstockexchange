@@ -6,21 +6,30 @@ template(name="front")
             | None of the risk, all of the fun
             
             
-    .ui.padded.segment
-        h2.ui.header
-            | Welcome to the stock exchange!
+    .ui.padded.container.segment
+        h2.ui.red.center.aligned.header
+            | THE BOTS ARE LOOSE!
         
-        p
-            | This project was made during the global
-            | distrubuted hackathon.
-        p
-            | You can browse the companies and most
-            | successful traders using the menu up top.
-        p
-            | To start playing, use the Sign in button
-            | and register your trader. You can then
-            | click on a company in the company list
-            | and issue buy and sell orders.
-        p
-            | The goal is to amass as much wealth as possible.
-            | Good luck!
+        .ui.text.container
+            p
+                | This project was made during the global
+                | distrubuted hackathon.
+            p
+                | It features a bunch of bots issuing random
+                | Buy and sell orders in a fictional stock market.
+            p
+                | You can browse the companies and most
+                | successful traders using the menu up top.
+            p
+                | You can click on a company in the company list
+                | and issue buy and sell orders.
+            p
+                | The goal is to amass as much wealth as possible.
+                | Good luck!
+            
+            .basic.segment
+                .ui.huge.green.center.aligned.button Begin trading adventure!
+                a(href="https://github.com/jorgeer/meteorstockexchange" style="font-size:3em")
+                    i.github.icon
+                
+    .ui.info.center.aligned.message(style="text-align:center")

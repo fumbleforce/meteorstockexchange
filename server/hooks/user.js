@@ -4,7 +4,7 @@ User.getCollection().after.insert(function (userId, doc) {
     set["profile.ident"] = ident;
     
     if (doc.profile.isBot) {
-        set["cash"] = 1000000;
+        set["cash"] = 10000000;
     } 
     
     User.getCollection().update(this._id, {

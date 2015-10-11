@@ -1,16 +1,12 @@
 
 Meteor.publish("stocks", function (opts) {
     let query = {};
-    
     if (opts.ident) {
-        query.owner = User.findOne({ "profile.ident": opts.ident });
+        let u = User.findOne({
+            "profile.ident": opts.ident
+        });
+        query.owner = u.get("_id");
     }
-    
-    _.each(opts, (val, key) => {
-        if (val) {
-            query[key] = val;
-        }
-    });
-        
+    console.log(query);
     return Stock.find(query);
 });

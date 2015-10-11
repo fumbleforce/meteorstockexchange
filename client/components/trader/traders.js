@@ -1,5 +1,5 @@
 Template.traders.onCreated(function () {
-    Meteor.subscribe("topTraders", {});
+    Subs.subscribe("topTraders", {});
 });
 
 Template.traders.onDestroyed(function () {

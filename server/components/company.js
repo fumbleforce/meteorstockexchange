@@ -23,7 +23,7 @@ Company.generate = () => {
     
     Order.insert({
         ticker: ticker,
-        _volume: 1000000,
+        _volume: 50000,
         price: Math.floor(Math.random()*100),
         orderType: "sell",
         issuer: ticker,

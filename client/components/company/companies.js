@@ -1,6 +1,6 @@
 Template.companies.onCreated(function () {
-    Meteor.subscribe("company", {});
-    Meteor.subscribe("priceHistoryLast", {});
+    Subs.subscribe("company", {});
+    Subs.subscribe("priceHistoryLast", {});
 });
 
 Template.companies.onDestroyed(function () {

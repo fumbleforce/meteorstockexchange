@@ -4,30 +4,46 @@ User.extend({
         doTrade: function (companies) {
             let company = companies[Math.floor(Math.random()*(companies.length -1))];
             
+            let aMinAgo = moment.utc().subtract(1, "minutes").toISOString();
+            console.log(aMinAgo);
+            Order.remove({
+                ticker: company.get("ticker"),
+                issuer: this.get("_id"),
+                orderType: "buy",
+                completed: false,
+            }, {
+                multiple: true
+            });
+            
             console.log("Trading in company", company.name);
+            console.log("User is", this.get("_id"));
             let orderCount = Order.find({
                 ticker: company.get("ticker"),
-                owner: this.get("_id")
+                issuer: this.get("_id"),
+                orderType: "buy",
+                completed: false
             }).count();
             
-            console.log("Has ", orderCount, "orders out for this company");
+            console.log("Has ", orderCount, " buy orders out for this company");
             
-            if (orderCount === 0) {
+            if (orderCount < 3) {
                 console.log("Creates an order");
                 
                 
                 let sellOrder = Order.findOne({
                     ticker: company.get("ticker"),
-                    orderType: "sell"
+                    orderType: "sell",
+                    completed: false
                 }, {
                     sort: {
-                        price: 1
+                        price: -1
                     }
                 });
                 
                 let buyOrder = Order.findOne({
                     ticker: company.get("ticker"),
-                    orderType: "buy"
+                    orderType: "buy",
+                    completed: false
                 }, {
                     sort: {
                         price: 1
@@ -35,10 +51,10 @@ User.extend({
                 });
                 
                 let price = 0;
-                if (!_.isUndefined(buyOrder)) {
-                    price = buyOrder.get("price") + 1;
+                if (!_.isUndefined(buyOrder) && !_.isUndefined(buyOrder)) {
+                    price = _.random(buyOrder.get("price"), Math.floor(sellOrder.get("price")));
                 } else {
-                    price = sellOrder.get("price") -1
+                    price = _.random(10, 100);
                 }
                 
                 Meteor.call("orders/create", {
@@ -110,10 +126,12 @@ User.startBotTrading = () => {
     console.log(bots.length, "bots, and ", companies.length, "companies");
     
     Meteor.setInterval(() => {
-        _.each(bots, (b) => {
-            console.log(b.profile.nickname, "does trade");
-            b.doTrade(companies);
+        _.each(bots, (b, i) => {
+            Meteor.setTimeout(() => {
+                console.log(b.profile.nickname, "does trade");
+                b.doTrade(companies);
+            }, Math.floor(Math.random()*1000) + (i*1000)) ;
         });
-    }, 10000);
+    }, 1000*bots.length);
     
 };

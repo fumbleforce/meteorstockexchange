@@ -45,7 +45,7 @@ Meteor.publish("topTraders", function () {
         },
         limit: 10,
         sort: {
-            cash: 1
+            cash: -1
         }
     });
 });

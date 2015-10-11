@@ -1,5 +1,5 @@
 Template.companyHistory.onCreated(function () {
-    this.priceSub = Meteor.subscribe("priceHistory", FlowRouter.current().params.ticker);
+    this.priceSub = Subs.subscribe("priceHistory", FlowRouter.current().params.ticker);
 });
 
 Template.companyHistory.onRendered(function () {
@@ -47,11 +47,11 @@ function drawPriceChart (data) {
         },
 
         title : {
-            text : instance.data.ticker + " Stock Price"
+            text : instance.ticker + " Stock Price"
         },
 
         series : [{
-            name : instance.data.ticker,
+            name : instance.ticker,
             data : prices,
             tooltip: {
                 valueDecimals: 2

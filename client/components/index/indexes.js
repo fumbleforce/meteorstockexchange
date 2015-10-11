@@ -1,5 +1,5 @@
 Template.indexes.onCreated(function () {
-    Meteor.subscribe("index", {});
+    Subs.subscribe("index", {});
 });
 
 Template.indexes.onDestroyed(function () {

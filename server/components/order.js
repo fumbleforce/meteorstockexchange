@@ -13,16 +13,26 @@ Order.extend({
             if (this.get("orderType") === "buy") {
                 
                 console.log("Charging", issuer.get("profile.nickname"), "for buy order of", volume, "x", this.get("ticker"));
+                let cost = this.orderValue(volume);
+                if (issuer.get("cash") < cost) {
+                    // Not enough money to buy
+                    console.log("Not enough money");
+                    e.preventDefault();
+                    return;
+                } else {
+                    console.log("Has", issuer.get("cash"), "to pay", cost);
+                }
                 
-                issuer.changeWallet(-this.orderValue());
+                //issuer.changeWallet(-cost);
             } else {
                 
                 let stocks = Stock.find({ owner: this.get("issuer") }).fetch();
-                let stockCount = _.reduce(stocks, (mem, s) => {
-                    return mem + s.get(volume);
-                }, 0);
+                let stockCount = 0;
+                _.each(stocks, (s) => {
+                    stockCount += s.get("volume");
+                });
                 
-                console.log(issuer.get("profile.name"), "is selling", volume, "of", this.get("ticker"), "and has", stockCount);
+                console.log(issuer.get("profile.nickname"), "is selling", volume, "of", this.get("ticker"), "and has", stockCount);
                 
                 if (stockCount < volume) {
                     // Not enough stock to sell
@@ -35,9 +45,9 @@ Order.extend({
                     _.each(stocks, (s) => {
                         if (removed >= volume) return;
                         
-                        if (removed + s.volume > volume) {
+                        if (removed + s.get("volume") > volume) {
                             let sVol = s.get("volume");
-                            s.set("volume", volume - removed);
+                            s.inc("volume", removed - volume);
                             removed += volume - removed;
                             s.save();
                             return true;
@@ -53,6 +63,7 @@ Order.extend({
         },
         
         afterInsert: function (e) {
+            console.log("Inserted order, trying to find matching");
             this.findMatching();
         },
         
@@ -72,22 +83,26 @@ Order.extend({
             return (Math.floor(this.get("price") * 100) * volume) / 100;
         },
         
-        matched: function (volume) {
+        matched: function (volume, price) {
             console.log("Matched", volume);
+            
             if (this.get("orderType") === "buy") {
+                console.log("Issuing", volume, "stocks of", this.get("ticker"), "to", this.get("issuer"));
                 Stock.insert({
                     volume: volume,
-                    owner: this.issuer,
+                    owner: this.get("issuer"),
                     ticker: this.get("ticker"),
-                    buyPrice: this.get("price")
+                    buyPrice: price
                 });
+                User.findOne(this.issuer).changeWallet(-(price*volume));
             } else {
                 if (!this.get("soldByCompany")) {
+                    console.log("Receiving $", this.orderValue(volume), "for sale of ",volume, "stocks of", this.get("ticker"));
                     User.findOne(this.issuer).changeWallet(this.orderValue(volume));
                 }
             }
             
-            this.set("_matched", this.get("_matched") + volume);
+            this.inc("_matched", volume);
             
             if (this.get("_matched") >= this.get("_volume")) {
                 this.set("completed", true);
@@ -102,7 +117,8 @@ Order.extend({
                 var matchingOrders = Order.find({
                     orderType: "sell",
                     ticker: this.get("ticker"),
-                    price: { $lte: this.get("price") }
+                    price: { $lte: this.get("price") },
+                    completed: false
                 }, {
                     sort: {
                         // TODO fix this
@@ -114,7 +130,8 @@ Order.extend({
                 var matchingOrders = Order.find({
                     orderType: "buy",
                     ticker: this.get("ticker"),
-                    price: { $gte: this.get("price") }
+                    price: { $gte: this.get("price") },
+                    completed: false
                 }, {
                     sort: {
                         // TODO fix this
@@ -123,16 +140,23 @@ Order.extend({
                     }
                 });
             }
-            
+            let need = this.get("_volume");
             _.each(matchingOrders.fetch(), (o, i) => {
-                console.log(o.get("volume"), "at", o.get("price"), "matches");
-                if (o.get("volume") > this.get("volume")) {
-                    this.matched(this.get("volume"));
-                    o.matched(this.get("volume"));
+                if (need === 0) {
+                    return;
+                } else if (need < 0) {
+                    throw Meteor.Error("Need is less than 0!!");
+                }
+                let price = o.get("price");
+                console.log(o.get("volume"), "at $", o.get("price"), "matches");
+                if (o.get("volume") > need) {
+                    this.matched(need, price);
+                    o.matched(need, price);
+                    need -= need;
                 } else {
-                    this.matched(o.get("volume"));
-                    o.matched(o.get("volume"));
-                    
+                    need -= o.get("volume");
+                    this.matched(o.get("volume"), price);
+                    o.matched(o.get("volume"), price);
                 }
             });
         }

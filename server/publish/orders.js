@@ -14,16 +14,8 @@ Meteor.publish("orders", function (opts) {
 });
 
 
-Meteor.publish("traderOrders", function (opts) {
-    let query = {
-       
-    };
-    
-    _.each(opts, (val, key) => {
-        if (val) {
-            query[key] = val;
-        }
+Meteor.publish("traderOrders", function (id) {
+    return Order.find({
+        issuer: id
     });
-        
-    return Order.find(query);
 });

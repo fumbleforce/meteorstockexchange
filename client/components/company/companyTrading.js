@@ -1,6 +1,6 @@
 Template.companyTrading.onCreated(function () {
     this.ticker = FlowRouter.current().params.ticker;
-    this.ordersSub = Meteor.subscribe("orders", { ticker: this.ticker });
+    this.ordersSub = Subs.subscribe("orders", { ticker: this.ticker });
 });
 
 Template.companyTrading.onRendered(function () {
@@ -18,7 +18,8 @@ Template.companyTrading.helpers({
         
         return Order.find({
             orderType: "buy",
-            ticker: instance.ticker
+            ticker: instance.ticker,
+            completed: false
         }, {
             sort: {
                 price: -1,
@@ -31,7 +32,8 @@ Template.companyTrading.helpers({
 
         return Order.find({
             orderType: "sell",
-            ticker: instance.ticker
+            ticker: instance.ticker,
+            completed: false
         }, {
             sort: {
                 price: 1,

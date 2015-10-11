@@ -1,17 +1,17 @@
 Template.trader.onCreated(function () {
-    Meteor.subscribe("stocks", { ident: FlowRouter.current().params.ident });
+    Subs.subscribe("stocks", { ident: FlowRouter.current().params.ident });
     
-    this.traderSub = Meteor.subscribe("trader", { "profile.ident": FlowRouter.current().params.ident });
-    
+    this.traderSub = Subs.subscribe("trader", { "profile.ident": FlowRouter.current().params.ident });
+    this.trader = { _id: "-1" };
     let orderSubSet = false;
     
     this.autorun(() => {
         if (this.traderSub.ready() && !orderSubSet) {
-            let trader = User.findOne({
+            this.trader = User.findOne({
                 "profile.ident": FlowRouter.current().params.ident
             });
             
-            Meteor.subscribe("traderOrders", { "owner": trader._id });
+            Subs.subscribe("traderOrders", this.trader._id);
             orderSubSet = true;
         }
     });
@@ -32,16 +32,32 @@ Template.trader.helpers({
     },
     
     sellOrders: () => {
-        return Order.find({
-            orderType: "sell"
-        });
+        if (Template.instance().traderSub.ready()) {
+            return Order.find({
+                orderType: "sell",
+                issuer: Template.instance().trader._id,
+                completed: false
+            });
+        }
     },
     
     buyOrders: () => {
-        return Order.find({
-            orderType: "buy"
-        });
+        if (Template.instance().traderSub.ready()) {
+            return Order.find({
+                orderType: "buy",
+                issuer: Template.instance().trader._id,
+                completed: false
+            });
+        }
     },
+    
+    ownedStocks: () => {
+        if (Template.instance().traderSub.ready()) {
+            return Stock.find({
+                owner: Template.instance().trader._id
+            });
+        }
+    }
     
 });
 
