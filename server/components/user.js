@@ -51,7 +51,7 @@ User.extend({
                 });
                 
                 let price = 0;
-                if (!_.isUndefined(buyOrder) && !_.isUndefined(buyOrder)) {
+                if (!_.isUndefined(buyOrder) && !_.isUndefined(sellOrder)) {
                     price = _.random(buyOrder.get("price"), Math.floor(sellOrder.get("price")*2));
                 } else {
                     price = _.random(10, 100);
