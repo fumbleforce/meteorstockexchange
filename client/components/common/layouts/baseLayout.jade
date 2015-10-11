@@ -16,7 +16,10 @@ template(name="baseLayout")
             
             .right.menu
                 if currentUser
-                    a.item(href="/mypage")
+                    .item(style="color: #21ba45 !important;background: #fff;")
+                        i.money.icon
+                        | {{dollar currentUser.cash}}
+                    a.item(href="/traders/#{currentUser.profile.ident}")
                         i.home.icon
                         | My page
                 else

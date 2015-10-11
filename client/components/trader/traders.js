@@ -25,3 +25,26 @@ Template.traders.events({
 
     },
 });
+
+Template.listedTrader.onCreated(function () {
+
+});
+
+Template.listedTrader.onDestroyed(function () {
+
+});
+
+Template.listedTrader.onRendered(function () {
+
+});
+
+Template.listedTrader.helpers({
+
+});
+
+Template.listedTrader.events({
+    "click .trader": function (e) {
+        FlowRouter.go("/traders/"+this.profile.ident)
+
+    },
+});

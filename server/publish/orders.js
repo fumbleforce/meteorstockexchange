@@ -1,6 +1,8 @@
 
 Meteor.publish("orders", function (opts) {
-    let query = {};
+    let query = {
+        completed: false,
+    };
     
     _.each(opts, (val, key) => {
         if (val) {

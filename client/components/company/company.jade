@@ -9,10 +9,10 @@ template(name="company")
             a.active.selection=name
         
         .ui.three.item.menu
-            .item(data-show="info" class="{{activeView 'info'}}")
-                | Company information
             .item(data-show="trading" class="{{activeView 'trading'}}")
                 | Trading
+            .item(data-show="info" class="{{activeView 'info'}}")
+                | Company information
             .item(data-show="historical" class="{{activeView 'historical'}}")
                 | Historical data
         

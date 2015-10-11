@@ -1,6 +1,6 @@
 Template.company.onCreated(function () {
     this.ticker = FlowRouter.current().params.ticker;
-    this.activeView = new ReactiveVar("info");
+    this.activeView = new ReactiveVar("trading");
     this.companySub = Meteor.subscribe("company", { ticker: this.ticker });
     
     

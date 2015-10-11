@@ -1,17 +1,17 @@
 Template.trader.onCreated(function () {
-
+    Meteor.subscribe("stocks", { ident: FlowRouter.current().params.ident });
+    Meteor.subscribe("trader", { ident: FlowRouter.current().params.ident });
 });
 
-Template.trader.onDestroyed(function () {
-
-});
 
 Template.trader.onRendered(function () {
 
 });
 
 Template.trader.helpers({
-
+    trader: () => {
+        return User.findOne({ ident: FlowRouter.current().params.ident });
+    }
 });
 
 Template.trader.events({

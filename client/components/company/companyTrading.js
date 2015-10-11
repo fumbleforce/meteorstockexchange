@@ -1,6 +1,6 @@
 Template.companyTrading.onCreated(function () {
     this.ticker = FlowRouter.current().params.ticker;
-    this.ordersSub = Meteor.subscribe("orders", { stock: this.ticker });
+    this.ordersSub = Meteor.subscribe("orders", { ticker: this.ticker });
 });
 
 Template.companyTrading.onRendered(function () {
@@ -18,7 +18,7 @@ Template.companyTrading.helpers({
         
         return Order.find({
             orderType: "buy",
-            stock: instance.ticker
+            ticker: instance.ticker
         }, {
             sort: {
                 createdAt: -1
@@ -31,7 +31,7 @@ Template.companyTrading.helpers({
 
         return Order.find({
             orderType: "sell",
-            stock: instance.ticker
+            ticker: instance.ticker
         }, {
             sort: {
                 createdAt: -1
@@ -48,12 +48,12 @@ Template.companyTrading.events({
     },
     
     "click .issue": function (e, t) {
-        new Order({
-            stock: this.ticker,
-            volume: +t.find("[name='volume']").value,
+        Meteor.call("orders/create", {
+            ticker: this.ticker,
+            _volume: +t.find("[name='volume']").value,
             price: +t.find("[name='price']").value,
             orderType: t.find("[name='orderType']:checked").value,
             issuer: Meteor.userId()            
-        }).save();
+        });
     }
 });

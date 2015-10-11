@@ -1,8 +1,7 @@
 template(name="companyTrading")
     
-    .ui.inverted.brown.segment
-        
-        if currentUser
+    if currentUser
+        .ui.inverted.brown.segment
             .ui.inverted.form
                 .inline.four.inverted.fields(style="margin:0;")
                     .field
@@ -22,8 +21,9 @@ template(name="companyTrading")
                                 input.hidden(type="radio" name="orderType" value="sell")
                     .field
                         .ui.issue.green.right.floated.button Issue order
-        else
-            h2 Register to issue buy and sell orders
+    else
+        .ui.warning.message
+            h2.header Register to issue buy and sell orders
                 
     .ui.equal.width.grid
         .column
@@ -35,7 +35,6 @@ template(name="companyTrading")
                         th Time
                         th Price
                         th Volume
-                        th Seller
                 tbody
                     each sellers
                         tr.blink
@@ -45,8 +44,6 @@ template(name="companyTrading")
                                 | #{price}
                             td
                                 | #{volume}
-                            td
-                                | #{seller}
         .column
             h2.ui.center.aligned.dividing.header Buy orders
             
@@ -56,7 +53,6 @@ template(name="companyTrading")
                         th Time
                         th Price
                         th Volume
-                        th Seller
                 tbody
                     each buyers
                         tr.blink
@@ -66,7 +62,5 @@ template(name="companyTrading")
                                 | #{price}
                             td
                                 | #{volume}
-                            td
-                                | #{seller}
 
 template(name="orderEntry")

@@ -59,6 +59,27 @@ AccountsTemplates.configure({
     defaultContentRegion: 'content'
 });
 
+var pwd = AccountsTemplates.removeField('password');
+AccountsTemplates.removeField('email');
+AccountsTemplates.addFields([
+  {
+      _id: "username",
+      type: "text",
+      displayName: "username",
+      required: true,
+      minLength: 5,
+  },
+  pwd,
+  {
+      _id: 'nickname',
+      type: 'text',
+      displayName: "Trader name",
+      required: true,
+      minLength: 2,
+      errStr: 'At least 2 letters',
+  }
+]);
+
 AccountsTemplates.configureRoute('signIn');
 
 /*

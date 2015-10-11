@@ -16,19 +16,19 @@ Template.indexes.helpers({
     }
 });
 
-Template.index.onCreated(function () {
+Template.listedIndex.onCreated(function () {
 
 });
 
-Template.index.onRendered(function () {
+Template.listedIndex.onRendered(function () {
 
 });
 
-Template.index.helpers({
+Template.listedIndex.helpers({
 
 });
 
-Template.index.events({
+Template.listedIndex.events({
     "click .index": function (e) {
         let ident = this.ident;
         FlowRouter.go("/indexes/"+ident);
