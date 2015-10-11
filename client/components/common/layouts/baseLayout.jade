@@ -2,11 +2,13 @@ template(name="baseLayout")
     
     .ui.inverted.brown.labeled.icon.menu
         .ui.container
-            h2.header.item(href="/") Meteor Stock Exchange
-        
-            a.item(href="/indexes")
-                i.icon.ticket
-                | Indexes
+            a.header.item(href="/")
+                h2.ui.inverted.header Meteor Stock Exchange
+            
+            //-
+                a.item(href="/indexes")
+                    i.icon.ticket
+                    | Indexes
             a.item(href="/companies")
                 i.suitcase.icon
                 | Companies

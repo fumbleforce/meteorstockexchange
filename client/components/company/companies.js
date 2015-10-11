@@ -1,5 +1,6 @@
 Template.companies.onCreated(function () {
     Meteor.subscribe("company", {});
+    Meteor.subscribe("priceHistoryLast", {});
 });
 
 Template.companies.onDestroyed(function () {
@@ -12,9 +13,9 @@ Template.companies.onRendered(function () {
 
 Template.companies.helpers({
     companies: () => {
-        console.log(Company.find().fetch());
         return Company.find();
-    }
+    },
+    
 });
 
 Template.companies.events({
@@ -41,7 +42,6 @@ Template.listedCompany.helpers({
 
 Template.listedCompany.events({
     "click .listed.company": function (e) {
-        console.log(this);
         let ticker = this.ticker;
         FlowRouter.go("/companies/" + ticker);
     },

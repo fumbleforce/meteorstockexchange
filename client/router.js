@@ -7,9 +7,9 @@ BlazeLayout.setRoot('body');
 
 
 FlowRouter.route("/", {
-    name: "home",
+    name: "front",
     action: () => {
-        BlazeLayout.render("baseLayout", { content: "home" });
+        BlazeLayout.render("baseLayout", { content: "front" });
     }
 });
 
@@ -46,14 +46,5 @@ FlowRouter.route("/traders/:ident", {
     name: "trader",
     action: () => {
         BlazeLayout.render("baseLayout", { content: "trader" });
-    }
-});
-
-
-FlowRouter.route("/mypage", {
-    name: "",
-    triggersEnter: [AccountsTemplates.ensureSignedIn],
-    action: () => {
-        BlazeLayout.render("baseLayout", { content: "mypage" });
     }
 });

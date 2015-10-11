@@ -1,28 +1,40 @@
 Order.extend({
     events: {
         beforeInsert: function (e) {
-            console.log("Before insert", this , e);
-            
             if (this.get("soldByCompany")) {
                 return;
             }
             
-            let volume = this.get("_volume")
+            let volume = this.get("_volume");
+            
+            console.log("Checking validity of inserted order");
+            let issuer = User.findOne(this.get("issuer"));
             
             if (this.get("orderType") === "buy") {
-                User.findOne(this.get("issuer")).changeWallet(-this.orderValue());
+                
+                console.log("Charging", issuer.get("profile.nickname"), "for buy order of", volume, "x", this.get("ticker"));
+                
+                issuer.changeWallet(-this.orderValue());
             } else {
+                
                 let stocks = Stock.find({ owner: this.get("issuer") }).fetch();
-                console.log("Stocks:", stocks);
-                let stockCount = _.reduce(stocks, (s) => { return s.volume; }, 0);
+                let stockCount = _.reduce(stocks, (mem, s) => {
+                    return mem + s.get(volume);
+                }, 0);
+                
+                console.log(issuer.get("profile.name"), "is selling", volume, "of", this.get("ticker"), "and has", stockCount);
                 
                 if (stockCount < volume) {
                     // Not enough stock to sell
+                    console.log("Can't sell this many");
                     e.preventDefault();
                     return;
                 } else {
+                    
                     let removed = 0;
-                    _.some(stocks, (s) => {
+                    _.each(stocks, (s) => {
+                        if (removed >= volume) return;
+                        
                         if (removed + s.volume > volume) {
                             let sVol = s.get("volume");
                             s.set("volume", volume - removed);
@@ -35,13 +47,19 @@ Order.extend({
                             return false;
                         }
                     });
+                    console.log("Removed", removed, "stocks");
                 }
             }
         },
         
         afterInsert: function (e) {
-            console.log("After insert", this , e);
             this.findMatching();
+        },
+        
+        events: {
+            afterChange: function (e) {
+                console.log(e.data.fieldName);
+            }
         }
     },
     
@@ -55,6 +73,7 @@ Order.extend({
         },
         
         matched: function (volume) {
+            console.log("Matched", volume);
             if (this.get("orderType") === "buy") {
                 Stock.insert({
                     volume: volume,
@@ -77,6 +96,8 @@ Order.extend({
         },
         
         findMatching: function () {
+            console.log("Finding matching order of", this.get("ticker"), "x", this.get("_volume"), "at", this.get("price"));
+            
             if (this.orderType === "buy") {
                 var matchingOrders = Order.find({
                     orderType: "sell",
@@ -104,7 +125,7 @@ Order.extend({
             }
             
             _.each(matchingOrders.fetch(), (o, i) => {
-                console.log("Matching", o);
+                console.log(o.get("volume"), "at", o.get("price"), "matches");
                 if (o.get("volume") > this.get("volume")) {
                     this.matched(this.get("volume"));
                     o.matched(this.get("volume"));

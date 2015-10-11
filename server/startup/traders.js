@@ -3,4 +3,5 @@ Meteor.startup(() => {
         User.generate();
     }
     
+    User.startBotTrading();
 });

@@ -1,17 +1,13 @@
-/*
-// Add additional fields to the user model on creation
-Accounts.onCreateUser(function(options, user) {
-    
-    user.cash = 100000;
-    
-    return user;
-});
-
-*/
-
 User.getCollection().after.insert(function (userId, doc) {
     let ident = this._id.slice(0, 6);
-    console.log("setting", this._id, "to", ident);
+    let set = {}
+    set["profile.ident"] = ident;
     
-    User.getCollection().update(this._id, { "profile.ident": ident });
+    if (doc.profile.isBot) {
+        set["cash"] = 1000000;
+    } 
+    
+    User.getCollection().update(this._id, {
+        $set: set
+    });
 });

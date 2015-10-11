@@ -1,8 +1,11 @@
 template(name="trader")
     h1.ui.center.aligned.header(style="margin: 1.5em 0")
-        | Trader
         with trader
             | #{profile.nickname}
+    
+    h3.ui.center.aligned.header
+        i.money.icon
+        | {{dollar trader.cash}}
     
     .ui.equal.width.grid
         .column
@@ -24,3 +27,38 @@ template(name="trader")
                             td
                                 | {{dollar buyPrice}}
         .column
+            h3.ui.header
+                | Sell orders
+            table.ui.striped.compact.selectable.table
+                thead
+                    tr
+                        th Ticker
+                        th Volume
+                        th Price
+                tbody
+                    each sellOrders
+                        tr
+                            td
+                                | #{ticker}
+                            td
+                                | #{volume}
+                            td
+                                | {{dollar price}}
+            
+            h3.ui.header
+                | Buy orders
+            table.ui.striped.compact.selectable.table
+                thead
+                    tr
+                        th Ticker
+                        th Volume
+                        th Price
+                tbody
+                    each buyOrders
+                        tr
+                            td
+                                | #{ticker}
+                            td
+                                | #{volume}
+                            td
+                                | {{dollar price}}

@@ -1,0 +1,1 @@
+Astro.config.verbose = false;

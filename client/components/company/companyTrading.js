@@ -21,7 +21,7 @@ Template.companyTrading.helpers({
             ticker: instance.ticker
         }, {
             sort: {
-                createdAt: -1
+                price: -1,
             }
         });
     },
@@ -34,7 +34,7 @@ Template.companyTrading.helpers({
             ticker: instance.ticker
         }, {
             sort: {
-                createdAt: -1
+                price: 1,
             }
         });
     },
@@ -53,7 +53,7 @@ Template.companyTrading.events({
             _volume: +t.find("[name='volume']").value,
             price: +t.find("[name='price']").value,
             orderType: t.find("[name='orderType']:checked").value,
-            issuer: Meteor.userId()            
+            issuer: Meteor.userId()
         });
     }
 });
