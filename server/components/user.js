@@ -130,8 +130,8 @@ User.startBotTrading = () => {
             Meteor.setTimeout(() => {
                 console.log(b.profile.nickname, "does trade");
                 b.doTrade(companies);
-            }, Math.floor(Math.random()*1000) + (i*1000)) ;
+            }, Math.floor(Math.random()*1000) + (i*3000)) ;
         });
-    }, 1000*bots.length);
+    }, 5000*bots.length);
     
 };
